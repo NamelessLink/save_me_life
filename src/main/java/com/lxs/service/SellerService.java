@@ -103,7 +103,7 @@ public class SellerService {
 
     //卖家删除菜品
     public boolean DeleteDish(@Param("r_id")String r_id, @Param("dish_id")String dish_id){
-        MenuKey menu = menuMapper.selectByPrimaryKey(r_id, dish_id);
+        Menu menu = menuMapper.selectByPrimaryKey(r_id, dish_id);
         if (menu != null){
             menuMapper.deleteByPrimaryKey(menu);
             return true;
@@ -152,33 +152,28 @@ public class SellerService {
     private OrderMapper orderMapper;
     @Autowired
     private RestaurantMapper restaurantMapper;
-
-//    //用户查看订单状态
-//    public List<OrderDetail> CheckOrder(@Param("r_id")String r_id){
-//        List<Order> orders = new LinkedList<Order>();
-//        orders = orderMapper.selectByRid(r_id);
-//        List<OrderDetail> orderDetails = new LinkedList<OrderDetail>();
-//        Iterator<Order> iterator = orders.iterator();
-//        while (iterator.hasNext()){
-//            Order order = iterator.next();
-//            OrderDetail orderDetail = new OrderDetail();
-//            orderDetail.setOrderId(order.getOrderId());
-//            orderDetail.setState(order.getState());
-//            orderDetail.setCreateDate(order.getCreateDate());
-//            orderDetail.setSendAddr(order.getSendAddr());
-//            orderDetail.setrName(restaurantMapper.selectByPrimaryKey(order.getrId()).getrName());
-//            orderDetail.setDishName(dishMapper.selectByPrimaryKey(order.getDishId()).getDishName());
-//            orderDetail.setDishPrice(dishMapper.selectByPrimaryKey(order.getDishId()).getDishPrice());
-//            orderDetails.add(orderDetail);
-//        }
-//        return orderDetails;
-//    }
+    @Autowired
+    private CustomerMapper customerMapper;
 
     //商家获取未接受订单
-    public List<Order> OrderList(@Param("r_id")String r_id){
+    public List<OrderDetail> OrderList(@Param("r_id")String r_id){
         List<Order> orders = new LinkedList<Order>();
         orders = orderMapper.selectByRid(r_id);
-        return orders;
+        List<OrderDetail> orderDetails = new LinkedList<OrderDetail>();
+        Iterator<Order> iterator = orders.iterator();
+        while (iterator.hasNext()){
+            Order order = iterator.next();
+            OrderDetail orderDetail = new OrderDetail();
+            orderDetail.setOrderId(order.getOrderId());
+            orderDetail.setCreateDate(order.getCreateDate());
+            orderDetail.setSendAddr(order.getSendAddr());
+            orderDetail.setPhone(customerMapper.selectByPrimaryKey(order.getUserId()).getPhone());
+            orderDetail.setUserName(customerMapper.selectByPrimaryKey(order.getUserId()).getUserName());
+            orderDetail.setDishName(dishMapper.selectByPrimaryKey(order.getDishId()).getDishName());
+            orderDetail.setDishPrice(dishMapper.selectByPrimaryKey(order.getDishId()).getDishPrice());
+            orderDetails.add(orderDetail);
+        }
+        return orderDetails;
     }
 
     @Autowired
@@ -186,7 +181,7 @@ public class SellerService {
     @Autowired
     private CooperationMapper cooperationMapper;
 
-    //商家指定骑手并接单
+    //商家接单
     public Order AcceptOrder(@Param("r_id")String r_id ,@Param("order_id")String order_id){
         Order order = orderMapper.selectByPrimaryKey(order_id);
         List<CooperationKey> cooperationKeys = new LinkedList<CooperationKey>();

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lxs.dao.SellerMapper" >
+  <resultMap id="BaseResultMap" type="com.lxs.entity.Seller" >
+    <id column="seller_id" property="sellerId" jdbcType="VARCHAR" />
+    <result column="seller_name" property="sellerName" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="pwd" property="pwd" jdbcType="VARCHAR" />
+    <result column="r_addr" property="rAddr" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="r_id" property="rId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    seller_id, seller_name, account, pwd, r_addr, phone, r_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from seller
+    where seller_id = #{sellerId,jdbcType=VARCHAR}
+  </select>
+  <select id="findSellerByLogin" resultMap="BaseResultMap">
+    select *
+    from seller
+    where account = #{account} and pwd = #{pwd}
+  </select>
+  <select id="findSellerByAccount" resultMap="BaseResultMap">
+    select *
+    from seller
+    where account = #{account}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from seller
+    where seller_id = #{sellerId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lxs.entity.Seller" >
+    insert into seller (seller_id, seller_name, account, 
+      pwd, r_addr, phone, 
+      r_id)
+    values (#{sellerId,jdbcType=VARCHAR}, #{sellerName,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
+      #{pwd,jdbcType=VARCHAR}, #{rAddr,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{rId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lxs.entity.Seller" >
+    insert into seller
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sellerId != null" >
+        seller_id,
+      </if>
+      <if test="sellerName != null" >
+        seller_name,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="pwd != null" >
+        pwd,
+      </if>
+      <if test="rAddr != null" >
+        r_addr,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="rId != null" >
+        r_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sellerId != null" >
+        #{sellerId,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerName != null" >
+        #{sellerName,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null" >
+        #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="rAddr != null" >
+        #{rAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="rId != null" >
+        #{rId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lxs.entity.Seller" >
+    update seller
+    <set >
+      <if test="sellerName != null" >
+        seller_name = #{sellerName,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null" >
+        pwd = #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="rAddr != null" >
+        r_addr = #{rAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="rId != null" >
+        r_id = #{rId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where seller_id = #{sellerId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lxs.entity.Seller" >
+    update seller
+    set seller_name = #{sellerName,jdbcType=VARCHAR},
+      account = #{account,jdbcType=VARCHAR},
+      pwd = #{pwd,jdbcType=VARCHAR},
+      r_addr = #{rAddr,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      r_id = #{rId,jdbcType=VARCHAR}
+    where seller_id = #{sellerId,jdbcType=VARCHAR}
+  </update>
+</mapper>

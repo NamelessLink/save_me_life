@@ -10692,8 +10692,8 @@ function tableRender(table, data) {
     rows[1].cells[0].innerText = '状态';
     rows[2].cells[0].innerText = '下单时间';
     rows[3].cells[0].innerText = '地址';
-    rows[4].cells[0].innerText = '姓名';
-    rows[5].cells[0].innerText = '菜品信息';
+    rows[4].cells[0].innerText = '餐馆名称';
+    rows[5].cells[0].innerText = '菜名';
     rows[6].cells[0].innerText = '价格';
 }
 

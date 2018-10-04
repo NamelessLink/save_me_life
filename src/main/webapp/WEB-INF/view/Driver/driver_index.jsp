@@ -16,8 +16,8 @@
     </div>
     <div id="main">
         <div id="navigation">
-            <button data-id="homePage-nav">派送订单</button>
-            <button data-id="order-nav">修改个人信息</button>
+            <button data-id="homePage-nav">管理合作</button>
+            <button data-id="order-nav">派送订单</button>
         </div>
         <div id="homePage" class="appear">
             <div id="restaurantPage" class="appear">

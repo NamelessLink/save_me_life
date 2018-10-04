@@ -181,6 +181,10 @@ public class UserService {
         order.setrId(r_id);
         order.setDishId(dish_id);
         order.setUserId(u_id);
+        Menu menu = new Menu();
+        menu = menuMapper.selectByPrimaryKey(r_id, dish_id);
+        menu.setSales(menu.getSales() + 1);
+        menuMapper.updateByPrimaryKeySelective(menu);
         orderMapper.insertSelective(order);
     }
 
@@ -195,7 +199,11 @@ public class UserService {
             OrderDetail orderDetail = new OrderDetail();
             orderDetail.setOrderId(order.getOrderId());
             if (order.getState() == 0){
-
+                orderDetail.setState("未接单");
+            }else if(order.getState() == 1){
+                orderDetail.setState("已接单");
+            }else{
+                orderDetail.setState("派送中");
             }
             orderDetail.setCreateDate(order.getCreateDate());
             orderDetail.setSendAddr(order.getSendAddr());

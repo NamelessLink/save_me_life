@@ -22,4 +22,6 @@ public interface OrderMapper {
     List<Order> selectByRid(@Param("r_id")String r_id);
 
     List<Order> selectByUid(@Param("u_id")String u_id);
+
+    int insertOrder(Order order);
 }

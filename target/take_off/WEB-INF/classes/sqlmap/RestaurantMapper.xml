@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lxs.dao.RestaurantMapper" >
+  <resultMap id="BaseResultMap" type="com.lxs.entity.Restaurant" >
+    <id column="r_id" property="rId" jdbcType="VARCHAR" />
+    <result column="r_name" property="rName" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="r_addr" property="rAddr" jdbcType="VARCHAR" />
+    <result column="owner_id" property="ownerId" jdbcType="VARCHAR" />
+    <result column="city_id" property="cityId" jdbcType="VARCHAR" />
+    <result column="street_id" property="streetId" jdbcType="VARCHAR" />
+    <result column="r_description" property="rDescription" jdbcType="VARCHAR" />
+    <result column="r_photo" property="rPhoto" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    r_id, r_name, tel, r_addr, owner_id, city_id, street_id, r_description, r_photo
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from restaurant
+    where r_id = #{rId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAllRestaurants" resultMap="BaseResultMap">
+    select *
+    from restaurant
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from restaurant
+    where r_id = #{rId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lxs.entity.Restaurant" >
+    insert into restaurant (r_id, r_name, tel, 
+      r_addr, owner_id, city_id, 
+      street_id, r_description, r_photo
+      )
+    values (#{rId,jdbcType=VARCHAR}, #{rName,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, 
+      #{rAddr,jdbcType=VARCHAR}, #{ownerId,jdbcType=VARCHAR}, #{cityId,jdbcType=VARCHAR}, 
+      #{streetId,jdbcType=VARCHAR}, #{rDescription,jdbcType=VARCHAR}, #{rPhoto,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lxs.entity.Restaurant" >
+    insert into restaurant
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rId != null" >
+        r_id,
+      </if>
+      <if test="rName != null" >
+        r_name,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="rAddr != null" >
+        r_addr,
+      </if>
+      <if test="ownerId != null" >
+        owner_id,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="streetId != null" >
+        street_id,
+      </if>
+      <if test="rDescription != null" >
+        r_description,
+      </if>
+      <if test="rPhoto != null" >
+        r_photo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rId != null" >
+        #{rId,jdbcType=VARCHAR},
+      </if>
+      <if test="rName != null" >
+        #{rName,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="rAddr != null" >
+        #{rAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerId != null" >
+        #{ownerId,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="streetId != null" >
+        #{streetId,jdbcType=VARCHAR},
+      </if>
+      <if test="rDescription != null" >
+        #{rDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="rPhoto != null" >
+        #{rPhoto,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lxs.entity.Restaurant" >
+    update restaurant
+    <set >
+      <if test="rName != null" >
+        r_name = #{rName,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="rAddr != null" >
+        r_addr = #{rAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerId != null" >
+        owner_id = #{ownerId,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="streetId != null" >
+        street_id = #{streetId,jdbcType=VARCHAR},
+      </if>
+      <if test="rDescription != null" >
+        r_description = #{rDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="rPhoto != null" >
+        r_photo = #{rPhoto,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where r_id = #{rId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lxs.entity.Restaurant" >
+    update restaurant
+    set r_name = #{rName,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      r_addr = #{rAddr,jdbcType=VARCHAR},
+      owner_id = #{ownerId,jdbcType=VARCHAR},
+      city_id = #{cityId,jdbcType=VARCHAR},
+      street_id = #{streetId,jdbcType=VARCHAR},
+      r_description = #{rDescription,jdbcType=VARCHAR},
+      r_photo = #{rPhoto,jdbcType=VARCHAR}
+    where r_id = #{rId,jdbcType=VARCHAR}
+  </update>
+</mapper>

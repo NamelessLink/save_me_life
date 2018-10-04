@@ -19,6 +19,8 @@ public class OrderDetail {
 
     private String driverName;
 
+    private String phone;
+
     private String rName;
 
     private String dishName;
@@ -77,7 +79,7 @@ public class OrderDetail {
         return userName;
     }
 
-    public void setUserId(String userId) {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 
@@ -111,5 +113,13 @@ public class OrderDetail {
 
     public int getDishPrice() {
         return dishPrice;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

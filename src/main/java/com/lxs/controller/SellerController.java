@@ -6,6 +6,7 @@ import com.lxs.entity.MenuKey;
 import com.lxs.entity.Order;
 import com.lxs.entity.Seller;
 import com.lxs.otherentity.DishName;
+import com.lxs.otherentity.OrderDetail;
 import com.lxs.service.SellerService;
 import com.lxs.util.JsonUtils;
 import com.lxs.util.PlanResult;
@@ -209,7 +210,7 @@ public class SellerController {
     //商家获取订单列表
     @RequestMapping(value = "/Seller/order/{r_id}", method = RequestMethod.GET)
     public void Order(@PathVariable("r_id")String r_id, HttpServletRequest request, HttpServletResponse response, ModelMap model)throws Exception{
-        List<Order> orders = new LinkedList<Order>();
+        List<OrderDetail> orders = new LinkedList<OrderDetail>();
         PlanResult ResponseResult = new PlanResult();
         response.setContentType("application/json;utf-8");
         response.setCharacterEncoding("UTF-8");
@@ -238,7 +239,6 @@ public class SellerController {
         ResponseResult.setData(order);
         String result = JsonUtils.ObjectToJson(ResponseResult);
         out.write(result);
-        //跳转到订单列表
         out.close();
     }
 }

@@ -10514,11 +10514,13 @@ function handleData(data) {
         var _data$i = data[i],
             orderId = _data$i.orderId,
             createDate = _data$i.createDate,
-            userId = _data$i.userId,
+            userId = _data$i.userName,
+            phone = _data$i.phone,
             sendAddr = _data$i.sendAddr,
-            dishId = _data$i.dishId;
+            dishName = _data$i.dishName,
+			dishPrice = _data$i.dishPrice;
 
-        var temp = [orderId, createDate, userId, '18***********', sendAddr, dishId, '20'];
+        var temp = [orderId, createDate, userId, phone, sendAddr, dishName, dishPrice];
         store.push(temp);
     }
     return store;

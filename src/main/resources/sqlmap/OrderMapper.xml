@@ -20,7 +20,7 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from order
+    from `order`
     where order_id = #{orderId,jdbcType=VARCHAR}
   </select>
   <select id="selectByRid" resultMap="BaseResultMap">
@@ -31,14 +31,14 @@
   <select id="selectByUid" resultMap="BaseResultMap">
     select order_id, state, create_date, expect_date, send_addr, user_id, r_id, dish_id
     from `order`
-    where user_id = #{u_id} and state = 0
+    where user_id = #{u_id} and state != -1
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from order
+    delete from `order`
     where order_id = #{orderId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.lxs.entity.Order" >
-    insert into order (order_id, state, create_date, 
+    insert into `order` (order_id, state, create_date,
       expect_date, end_date, send_addr, 
       user_id, driver_id, r_id, 
       dish_id)
@@ -48,7 +48,7 @@
       #{dishId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lxs.entity.Order" >
-    insert into order
+    insert into `order`
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="orderId != null" >
         order_id,
@@ -115,7 +115,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.lxs.entity.Order" >
-    update order
+    update `order`
     <set >
       <if test="state != null" >
         state = #{state,jdbcType=INTEGER},
@@ -148,7 +148,7 @@
     where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lxs.entity.Order" >
-    update order
+    update `order`
     set state = #{state,jdbcType=INTEGER},
       create_date = #{createDate,jdbcType=DATE},
       expect_date = #{expectDate,jdbcType=DATE},

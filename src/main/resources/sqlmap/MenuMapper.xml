@@ -13,8 +13,8 @@
     select 
     <include refid="Base_Column_List" />
     from menu
-    where r_id = #{rId,jdbcType=VARCHAR}
-      and dish_id = #{dishId,jdbcType=VARCHAR}
+    where r_id = #{r_id,jdbcType=VARCHAR}
+      and dish_id = #{dish_id,jdbcType=VARCHAR}
   </select>
   <select id="selectByRid" resultMap="BaseResultMap">
     select *
