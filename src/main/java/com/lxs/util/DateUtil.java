@@ -1,5 +1,10 @@
 package com.lxs.util;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -17,9 +22,11 @@ public class DateUtil {
         Date new_date = calendar.getTime();
         return new_date;
     }
-     public static void main(String [] args){
+     public static void main(String [] args) throws ParseException {
         Date date = new Date();
         date = ExpectDate(date);
-         System.out.println(date);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date time = sdf.parse(sdf.format(date));
+        System.out.println(time);
      }
 }

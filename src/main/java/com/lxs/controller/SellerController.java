@@ -1,5 +1,6 @@
 package com.lxs.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lxs.dao.DishMapper;
 import com.lxs.entity.Dish;
 import com.lxs.entity.MenuKey;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.util.*;
+
 
 @Controller
 public class SellerController {
@@ -208,8 +210,9 @@ public class SellerController {
     }
 
     //商家获取订单列表
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @RequestMapping(value = "/Seller/order/{r_id}", method = RequestMethod.GET)
-    public void Order(@PathVariable("r_id")String r_id, HttpServletRequest request, HttpServletResponse response, ModelMap model)throws Exception{
+    public void CheckOrder(@PathVariable("r_id")String r_id, HttpServletRequest request, HttpServletResponse response, ModelMap model)throws Exception{
         List<OrderDetail> orders = new LinkedList<OrderDetail>();
         PlanResult ResponseResult = new PlanResult();
         response.setContentType("application/json;utf-8");
@@ -231,7 +234,6 @@ public class SellerController {
         PlanResult ResponseResult = new PlanResult();
         response.setContentType("application/json;utf-8");
         response.setCharacterEncoding("UTF-8");
-
         PrintWriter out = response.getWriter();
         Order order = sellerService.AcceptOrder(r_id, order_id);
         ResponseResult.setStatus(true);

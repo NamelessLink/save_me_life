@@ -19,9 +19,9 @@ public interface OrderMapper {
     int updateByPrimaryKey(Order record);
 
     //自己写的
-    List<Order> selectByRid(@Param("r_id")String r_id);
+    List<Order> selectByRid(@Param("r_id") String r_id);
+
+    List<Order> selectByRidD(@Param("r_id") String r_id);
 
     List<Order> selectByUid(@Param("u_id")String u_id);
-
-    int insertOrder(Order order);
 }

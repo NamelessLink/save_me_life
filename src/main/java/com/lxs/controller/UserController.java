@@ -1,5 +1,6 @@
 package com.lxs.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lxs.dao.CustomerMapper;
 import com.lxs.dao.RestaurantMapper;
 import com.lxs.entity.Customer;
@@ -277,6 +278,7 @@ public class UserController {
     }
 
     //用户查看未完成订单状态
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @RequestMapping(value = "/User/order/{u_id}", method = RequestMethod.GET)
     public void CheckOrder(@PathVariable("u_id")String u_id, HttpServletRequest request, HttpServletResponse response,
                            ModelMap model)throws Exception{

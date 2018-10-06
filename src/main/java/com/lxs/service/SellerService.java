@@ -1,11 +1,13 @@
 package com.lxs.service;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lxs.dao.*;
 import com.lxs.entity.*;
 import com.lxs.otherentity.OrderDetail;
 import com.lxs.util.SnowFlakeIdWorker;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,6 +17,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.lxs.util.DateUtil.ExpectDate;
 import static com.lxs.util.MD5.md5;
 
 @Service
@@ -80,6 +83,7 @@ public class SellerService {
                 Menu menu = new Menu();
                 menu.setrId(r_id);
                 menu.setDishId(dish.getDishId());
+                dish.setDishPrice(dish_price);
                 menuMapper.insert(menu);
                 return true;
             }
@@ -184,10 +188,6 @@ public class SellerService {
     //商家接单
     public Order AcceptOrder(@Param("r_id")String r_id ,@Param("order_id")String order_id){
         Order order = orderMapper.selectByPrimaryKey(order_id);
-        List<CooperationKey> cooperationKeys = new LinkedList<CooperationKey>();
-        cooperationKeys = cooperationMapper.selectByRid(r_id);
-        order.setDriverId(cooperationKeys.get(0).getDriverId());
-        order.setExpectDate(new Date());
         order.setState(1);
         orderMapper.updateByPrimaryKeySelective(order);
         return order;

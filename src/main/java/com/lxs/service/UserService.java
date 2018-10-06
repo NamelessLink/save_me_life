@@ -1,5 +1,6 @@
 package com.lxs.service;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lxs.dao.*;
 import com.lxs.entity.*;
 import com.lxs.otherentity.DishName;
@@ -9,6 +10,7 @@ import com.lxs.otherentity.RestaurantName;
 import com.lxs.util.SnowFlakeIdWorker;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -18,6 +20,7 @@ import java.util.List;
 
 import static com.lxs.util.DateUtil.ExpectDate;
 import static com.lxs.util.MD5.md5;
+
 
 @Service
 public class UserService {
@@ -174,8 +177,7 @@ public class UserService {
         SnowFlakeIdWorker snowFlakeIdWorker = new SnowFlakeIdWorker(1,15);
         Order order = new Order();
         order.setOrderId(String.valueOf(snowFlakeIdWorker.nextId()));
-        Date date = new Date();
-        order.setCreateDate(date);
+        order.setCreateDate(new Date());
         order.setState(0);
         order.setSendAddr(userMapper.selectByPrimaryKey(u_id).getAddr());
         order.setrId(r_id);

@@ -1,13 +1,13 @@
 package com.lxs.entity;
 
 public class Menu extends MenuKey {
-    private Integer sales;
+    private int sales;
 
-    public Integer getSales() {
+    public int getSales() {
         return sales;
     }
 
-    public void setSales(Integer sales) {
+    public void setSales(int sales) {
         this.sales = sales;
     }
 }

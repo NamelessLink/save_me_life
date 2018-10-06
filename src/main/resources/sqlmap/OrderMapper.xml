@@ -4,9 +4,9 @@
   <resultMap id="BaseResultMap" type="com.lxs.entity.Order" >
     <id column="order_id" property="orderId" jdbcType="VARCHAR" />
     <result column="state" property="state" jdbcType="INTEGER" />
-    <result column="create_date" property="createDate" jdbcType="DATE" />
-    <result column="expect_date" property="expectDate" jdbcType="DATE" />
-    <result column="end_date" property="endDate" jdbcType="DATE" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="expect_date" property="expectDate" jdbcType="TIMESTAMP" />
+    <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
     <result column="send_addr" property="sendAddr" jdbcType="VARCHAR" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="driver_id" property="driverId" jdbcType="VARCHAR" />
@@ -28,6 +28,11 @@
     from `order`
     where r_id = #{r_id} and state = 0
   </select>
+  <select id="selectByRidD" resultMap="BaseResultMap">
+    select order_id, state, create_date, send_addr, user_id, r_id, dish_id
+    from `order`
+    where r_id = #{r_id} and state = 1
+  </select>
   <select id="selectByUid" resultMap="BaseResultMap">
     select order_id, state, create_date, expect_date, send_addr, user_id, r_id, dish_id
     from `order`
@@ -42,8 +47,8 @@
       expect_date, end_date, send_addr, 
       user_id, driver_id, r_id, 
       dish_id)
-    values (#{orderId,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{createDate,jdbcType=DATE}, 
-      #{expectDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, #{sendAddr,jdbcType=VARCHAR}, 
+    values (#{orderId,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{expectDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}, #{sendAddr,jdbcType=VARCHAR}, 
       #{userId,jdbcType=VARCHAR}, #{driverId,jdbcType=VARCHAR}, #{rId,jdbcType=VARCHAR}, 
       #{dishId,jdbcType=VARCHAR})
   </insert>
@@ -89,13 +94,13 @@
         #{state,jdbcType=INTEGER},
       </if>
       <if test="createDate != null" >
-        #{createDate,jdbcType=DATE},
+        #{createDate,jdbcType=TIMESTAMP},
       </if>
       <if test="expectDate != null" >
-        #{expectDate,jdbcType=DATE},
+        #{expectDate,jdbcType=TIMESTAMP},
       </if>
       <if test="endDate != null" >
-        #{endDate,jdbcType=DATE},
+        #{endDate,jdbcType=TIMESTAMP},
       </if>
       <if test="sendAddr != null" >
         #{sendAddr,jdbcType=VARCHAR},
@@ -121,13 +126,13 @@
         state = #{state,jdbcType=INTEGER},
       </if>
       <if test="createDate != null" >
-        create_date = #{createDate,jdbcType=DATE},
+        create_date = #{createDate,jdbcType=TIMESTAMP},
       </if>
       <if test="expectDate != null" >
-        expect_date = #{expectDate,jdbcType=DATE},
+        expect_date = #{expectDate,jdbcType=TIMESTAMP},
       </if>
       <if test="endDate != null" >
-        end_date = #{endDate,jdbcType=DATE},
+        end_date = #{endDate,jdbcType=TIMESTAMP},
       </if>
       <if test="sendAddr != null" >
         send_addr = #{sendAddr,jdbcType=VARCHAR},
@@ -150,9 +155,9 @@
   <update id="updateByPrimaryKey" parameterType="com.lxs.entity.Order" >
     update `order`
     set state = #{state,jdbcType=INTEGER},
-      create_date = #{createDate,jdbcType=DATE},
-      expect_date = #{expectDate,jdbcType=DATE},
-      end_date = #{endDate,jdbcType=DATE},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      expect_date = #{expectDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP},
       send_addr = #{sendAddr,jdbcType=VARCHAR},
       user_id = #{userId,jdbcType=VARCHAR},
       driver_id = #{driverId,jdbcType=VARCHAR},
