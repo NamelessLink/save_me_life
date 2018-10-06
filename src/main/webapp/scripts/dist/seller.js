@@ -10499,6 +10499,10 @@ function orderInit() {
                 if (obj.status) {
                     alert('deliver');
                     target.style.color = 'gray';
+                    state = (0, _ajax.sendAjax)(function (obj) {
+                        //重新获取订单
+						orderInit();
+                    }, '/Seller/order/' + rid);
                 } else {
                     alert('fail');
                 }
@@ -10515,12 +10519,12 @@ function handleData(data) {
             orderId = _data$i.orderId,
             createDate = _data$i.createDate,
             userId = _data$i.userName,
-            phone = _data$i.phone,
+            userPhone = _data$i.userPhone,
             sendAddr = _data$i.sendAddr,
             dishName = _data$i.dishName,
 			dishPrice = _data$i.dishPrice;
 
-        var temp = [orderId, createDate, userId, phone, sendAddr, dishName, dishPrice];
+        var temp = [orderId, createDate, userId, userPhone, sendAddr, dishName, dishPrice];
         store.push(temp);
     }
     return store;

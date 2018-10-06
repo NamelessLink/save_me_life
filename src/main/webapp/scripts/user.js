@@ -10648,7 +10648,7 @@ function orderInit() {
             var table = document.createElement('table');
             table.dataset.id = 'order';
             table.className = 'order';
-            for (var j = 0; j < 10; j++) {
+            for (var j = 0; j < 7; j++) {
                 var tr = document.createElement('tr');
                 var td1 = document.createElement('td');
                 var td2 = document.createElement('td');
@@ -10656,34 +10656,10 @@ function orderInit() {
                 tr.appendChild(td2);
                 table.appendChild(tr);
             }
-
-            var _tr = document.createElement('tr');
-            var _td = document.createElement('td');
-            _td.colSpan = '2';
-            _td.dataset.id = 'finish';
-            _td.dataset.orderId = store[i][0];
-            _tr.appendChild(_td);
-            table.appendChild(_tr);
             tableRender(table, store[i]);
             orderPage.appendChild(table);
         }
     }, '/User/order/' + uid);
-
-    var orderPage = document.getElementById('orderPageContainer');
-    orderPage.addEventListener('click', function (e) {
-        var target = e.target;
-        if (target.dataset.id == 'finish') {
-            state = (0, _ajax.sendAjax)(function (obj) {
-                if (obj.status) {
-                    alert('finish');
-                    target.style.color = 'gray';
-                } else {
-                    alert('fail');
-                }
-            }, '/User/order/finish/' + target.dataset.orderId);
-        }
-
-    });
 }
 function handleData(data) {
     //处理数据
@@ -10694,39 +10670,37 @@ function handleData(data) {
             orderId = _data$i.orderId,
             state = _data$i.state,
             createDate = _data$i.createDate,
-            expectDate = _data$i.expectDate,
+			expectDate = _data$i.expectDate,
             sendAddr = _data$i.sendAddr,
-			driverName = _data$i.driverName,
+            driverName = _data$i.driverName,
 			driverPhone = _data$i.driverPhone,
             rName = _data$i.rName,
             dishName = _data$i.dishName,
             dishPrice = _data$i.dishPrice;
-        if(expectDate == null){
-            expectDate = "派送员还未开始派送"
-		}
-        var temp = [orderId, state, createDate, expectDate, sendAddr, driverPhone, driverPhone, rName, dishName, dishPrice];
+
+        var temp = [orderId, state, createDate, expectDate, sendAddr, driverName, driverPhone, rName, dishName, dishPrice];
         store.push(temp);
     }
     return store;
 }
 
 function tableRender(table, data) {
+
     var rows = table.rows;
     console.log(rows);
-    for (var i = 0; i < rows.length - 1; i++) {
+    for (var i = 0; i < rows.length; i++) {
         rows[i].cells[1].innerText = data[i];
     }
     rows[0].cells[0].innerText = '订单号';
     rows[1].cells[0].innerText = '状态';
     rows[2].cells[0].innerText = '下单时间';
-    rows[3].cells[0].innerText = '预计送达';
+    rows[3].cells[0].innerText = '预计送达时间';
     rows[4].cells[0].innerText = '地址';
     rows[5].cells[0].innerText = '派送员';
-    rows[6].cells[0].innerText = '派送员电话';
+	rows[6].cells[0].innerText = '派送员手机';
     rows[7].cells[0].innerText = '餐馆名称';
     rows[8].cells[0].innerText = '菜名';
     rows[9].cells[0].innerText = '价格';
-    rows[10].cells[0].innerText= '确认送达';
 }
 
 function homePageInit() {
@@ -10770,13 +10744,8 @@ function homePageInit() {
         } else if (target.getAttribute('class') == 'dish') {
 
             var d = (0, _ajax.sendAjax)(function (obj) {
-                if (obj.status) {
-                	alert('you have get a dish');
-                    state = (0, _ajax.sendAjax)(function (obj) {
-                        //重新获取主页面
-                        orderInit();
-                    }, '/User/order/' + uid);
-                }
+
+                if (obj.status) alert('you have get a dish');
             }, '/User/add_order', 'u_id=' + uid + '&r_id=' + target.dataset.rId + '&dish_id=' + target.dataset.id);
         }
     });

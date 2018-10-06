@@ -26,9 +26,11 @@ public class OrderDetail {
 
     private String userName;
 
+    private String userPhone;
+
     private String driverName;
 
-    private String phone;
+    private String driverPhone;
 
     private String rName;
 
@@ -92,11 +94,19 @@ public class OrderDetail {
         this.userName = userName;
     }
 
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
+    }
+
+    public String getUserPhone() {
+        return userPhone;
+    }
+
     public String getDriverName() {
         return driverName;
     }
 
-    public void setDriverId(String driverName) {
+    public void setDriverName(String driverName) {
         this.driverName = driverName;
     }
 
@@ -124,11 +134,11 @@ public class OrderDetail {
         return dishPrice;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getDriverPhone() {
+        return driverPhone;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setDriverPhone(String driverPhone) {
+        this.driverPhone = driverPhone;
     }
 }

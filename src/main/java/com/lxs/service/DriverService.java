@@ -88,7 +88,7 @@ public class DriverService {
                     orderDetail.setOrderId(order.getOrderId());
                     orderDetail.setCreateDate(order.getCreateDate());
                     orderDetail.setSendAddr(order.getSendAddr());
-                    orderDetail.setPhone(customerMapper.selectByPrimaryKey(order.getUserId()).getPhone());
+                    orderDetail.setUserPhone(customerMapper.selectByPrimaryKey(order.getUserId()).getPhone());
                     orderDetail.setrName(restaurantMapper.selectByPrimaryKey(order.getrId()).getrName());
                     orderDetail.setUserName(customerMapper.selectByPrimaryKey(order.getUserId()).getUserName());
                     orderDetail.setDishName(dishMapper.selectByPrimaryKey(order.getDishId()).getDishName());

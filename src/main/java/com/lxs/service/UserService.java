@@ -201,6 +201,9 @@ public class UserService {
         }
     }
 
+    @Autowired
+    private DriverMapper driverMapper;
+
     //用户查看订单状态
     public List<OrderDetail> CheckOrder(@Param("u_id")String u_id){
         List<Order> orders = new LinkedList<Order>();
@@ -213,13 +216,23 @@ public class UserService {
             orderDetail.setOrderId(order.getOrderId());
             if (order.getState() == 0){
                 orderDetail.setState("未接单");
+//                orderDetail.setExpectDate(new Date());
             }else if(order.getState() == 1){
                 orderDetail.setState("已接单");
+//                orderDetail.setExpectDate(new Date());
             }else{
                 orderDetail.setState("派送中");
+                orderDetail.setExpectDate(order.getExpectDate());
             }
             orderDetail.setCreateDate(order.getCreateDate());
             orderDetail.setSendAddr(order.getSendAddr());
+            if(order.getDriverId() != null){
+                orderDetail.setDriverName(driverMapper.selectByPrimaryKey(order.getDriverId()).getDriverName());
+                orderDetail.setDriverPhone(driverMapper.selectByPrimaryKey(order.getDriverId()).getPhone());
+            }else {
+                orderDetail.setDriverName("商家还未派送");
+                orderDetail.setDriverPhone("商家还未派送");
+            }
             orderDetail.setrName(restaurantMapper.selectByPrimaryKey(order.getrId()).getrName());
             orderDetail.setDishName(dishMapper.selectByPrimaryKey(order.getDishId()).getDishName());
             orderDetail.setDishPrice(dishMapper.selectByPrimaryKey(order.getDishId()).getDishPrice());

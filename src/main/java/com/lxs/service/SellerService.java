@@ -173,7 +173,7 @@ public class SellerService {
             orderDetail.setOrderId(order.getOrderId());
             orderDetail.setCreateDate(order.getCreateDate());
             orderDetail.setSendAddr(order.getSendAddr());
-            orderDetail.setPhone(customerMapper.selectByPrimaryKey(order.getUserId()).getPhone());
+            orderDetail.setUserPhone(customerMapper.selectByPrimaryKey(order.getUserId()).getPhone());
             orderDetail.setUserName(customerMapper.selectByPrimaryKey(order.getUserId()).getUserName());
             orderDetail.setDishName(dishMapper.selectByPrimaryKey(order.getDishId()).getDishName());
             orderDetail.setDishPrice(dishMapper.selectByPrimaryKey(order.getDishId()).getDishPrice());
