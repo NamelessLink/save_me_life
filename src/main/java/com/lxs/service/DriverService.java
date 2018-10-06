@@ -2,18 +2,16 @@ package com.lxs.service;
 
 import com.lxs.dao.*;
 import com.lxs.entity.Cooperation;
-import com.lxs.entity.Customer;
 import com.lxs.entity.Driver;
 import com.lxs.entity.Order;
+import com.lxs.entity.Restaurant;
 import com.lxs.otherentity.OrderDetail;
+import com.lxs.otherentity.RestaurantName;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.lxs.util.MD5.md5;
 import static com.lxs.util.DateUtil.ExpectDate;
@@ -80,21 +78,23 @@ public class DriverService {
         List<OrderDetail> orderDetails = new LinkedList<OrderDetail>();
         while(iterator.hasNext()){
             Cooperation cooperation = iterator.next();
-            List<Order> orders = new LinkedList<Order>();
-            orders = orderMapper.selectByRidD(cooperation.getrId());
-            Iterator<Order> It_O = orders.iterator();
-            while(It_O.hasNext()){
-                Order order = It_O.next();
-                OrderDetail orderDetail = new OrderDetail();
-                orderDetail.setOrderId(order.getOrderId());
-                orderDetail.setCreateDate(order.getCreateDate());
-                orderDetail.setSendAddr(order.getSendAddr());
-                orderDetail.setPhone(customerMapper.selectByPrimaryKey(order.getUserId()).getPhone());
-                orderDetail.setrName(restaurantMapper.selectByPrimaryKey(order.getrId()).getrName());
-                orderDetail.setUserName(customerMapper.selectByPrimaryKey(order.getUserId()).getUserName());
-                orderDetail.setDishName(dishMapper.selectByPrimaryKey(order.getDishId()).getDishName());
-                orderDetail.setDishPrice(dishMapper.selectByPrimaryKey(order.getDishId()).getDishPrice());
-                orderDetails.add(orderDetail);
+            if(cooperation.getStatus() == 1){
+                List<Order> orders = new LinkedList<Order>();
+                orders = orderMapper.selectByRidD(cooperation.getrId());
+                Iterator<Order> It_O = orders.iterator();
+                while(It_O.hasNext()){
+                    Order order = It_O.next();
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.setOrderId(order.getOrderId());
+                    orderDetail.setCreateDate(order.getCreateDate());
+                    orderDetail.setSendAddr(order.getSendAddr());
+                    orderDetail.setPhone(customerMapper.selectByPrimaryKey(order.getUserId()).getPhone());
+                    orderDetail.setrName(restaurantMapper.selectByPrimaryKey(order.getrId()).getrName());
+                    orderDetail.setUserName(customerMapper.selectByPrimaryKey(order.getUserId()).getUserName());
+                    orderDetail.setDishName(dishMapper.selectByPrimaryKey(order.getDishId()).getDishName());
+                    orderDetail.setDishPrice(dishMapper.selectByPrimaryKey(order.getDishId()).getDishPrice());
+                    orderDetails.add(orderDetail);
+                }
             }
         }
         return orderDetails;
@@ -110,5 +110,71 @@ public class DriverService {
         return order;
     }
 
-    //
+    //骑手获取餐馆列表
+    public List<RestaurantName> RestaurantList(){
+        List<RestaurantName> restaurantNames = new LinkedList<RestaurantName>();
+        List<Restaurant> restaurants = restaurantMapper.selectAllRestaurants();
+        Iterator<Restaurant> iterator = restaurants.iterator();
+        while (iterator.hasNext()){
+            Restaurant restaurant = iterator.next();
+            RestaurantName restaurantName = new RestaurantName();
+            restaurantName.setrName(restaurant.getrName());
+            restaurantName.setrId(restaurant.getrId());
+            restaurantNames.add(restaurantName);
+        }
+        return restaurantNames;
+    }
+
+    //骑手向餐馆发起合作申请
+    public Cooperation CoopApply(String driver_id, String r_id){
+        Cooperation cooperation = new Cooperation();
+        cooperation.setDriverId(driver_id);
+        cooperation.setrId(r_id);
+        cooperationMapper.insertSelective(cooperation);
+        return cooperationMapper.selectByPrimaryKey(cooperation);
+    }
+
+    //骑手查看已达成合作关系
+    public List<RestaurantName> FinishCoopList(String driver_id){
+        List<RestaurantName> restaurantNames = new LinkedList<RestaurantName>();
+        List<Cooperation> cooperations = cooperationMapper.selectByDid(driver_id);
+        Iterator<Cooperation> iterator = cooperations.iterator();
+        while (iterator.hasNext()){
+            Cooperation cooperation = iterator.next();
+            if (cooperation.getStatus() == 1){
+                Restaurant restaurant = restaurantMapper.selectByPrimaryKey(cooperation.getrId());
+                RestaurantName restaurantName = new RestaurantName();
+                restaurantName.setrName(restaurant.getrName());
+                restaurantName.setrId(restaurant.getrId());
+                restaurantNames.add(restaurantName);
+            }
+        }
+        return restaurantNames;
+    }
+
+    //骑手查看申请中的合作关系
+    public List<RestaurantName> ApplyCoopList(String driver_id){
+        List<RestaurantName> restaurantNames = new LinkedList<RestaurantName>();
+        List<Cooperation> cooperations = cooperationMapper.selectByDid(driver_id);
+        Iterator<Cooperation> iterator = cooperations.iterator();
+        while (iterator.hasNext()){
+            Cooperation cooperation = iterator.next();
+            if (cooperation.getStatus() == 0){
+                Restaurant restaurant = restaurantMapper.selectByPrimaryKey(cooperation.getrId());
+                RestaurantName restaurantName = new RestaurantName();
+                restaurantName.setrId(restaurant.getrId());
+                restaurantName.setrName(restaurant.getrName());
+                restaurantNames.add(restaurantName);
+            }
+        }
+        return restaurantNames;
+    }
+
+    //骑手解除或取消合作关系
+    public void CancelCoop(String driver_id, String r_id){
+        Cooperation cooperation = new Cooperation();
+        cooperation.setrId(r_id);
+        cooperation.setDriverId(driver_id);
+        cooperationMapper.deleteByPrimaryKey(cooperation);
+    }
 }

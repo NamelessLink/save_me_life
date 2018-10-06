@@ -3,7 +3,9 @@ package com.lxs.service;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lxs.dao.*;
 import com.lxs.entity.*;
+import com.lxs.otherentity.DriverName;
 import com.lxs.otherentity.OrderDetail;
+import com.lxs.otherentity.RestaurantName;
 import com.lxs.util.SnowFlakeIdWorker;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -191,5 +193,49 @@ public class SellerService {
         order.setState(1);
         orderMapper.updateByPrimaryKeySelective(order);
         return order;
+    }
+
+    //商家查看已达成合作关系
+    public List<DriverName> FinishCoopList(String r_id){
+        List<DriverName> driverNames = new LinkedList<DriverName>();
+        List<Cooperation> cooperations = cooperationMapper.selectByRid(r_id);
+        Iterator<Cooperation> iterator = cooperations.iterator();
+        while (iterator.hasNext()){
+            Cooperation cooperation = iterator.next();
+            if (cooperation.getStatus() == 1){
+                Driver driver = driverMapper.selectByPrimaryKey(cooperation.getDriverId());
+                DriverName driverName = new DriverName();
+                driverName.setDriver_id(driver.getDriverId());
+                driverName.setDriver_name(driver.getDriverName());
+                driverNames.add(driverName);
+            }
+        }
+        return driverNames;
+    }
+
+    //商家查看申请中的合作关系
+    public List<DriverName> ApplyCoopList(String r_id){
+        List<DriverName> driverNames = new LinkedList<DriverName>();
+        List<Cooperation> cooperations = cooperationMapper.selectByRid(r_id);
+        Iterator<Cooperation> iterator = cooperations.iterator();
+        while (iterator.hasNext()){
+            Cooperation cooperation = iterator.next();
+            if (cooperation.getStatus() == 0){
+                Driver driver = driverMapper.selectByPrimaryKey(cooperation.getDriverId());
+                DriverName driverName = new DriverName();
+                driverName.setDriver_name(driver.getDriverName());
+                driverName.setDriver_id(driver.getDriverId());
+                driverNames.add(driverName);
+            }
+        }
+        return driverNames;
+    }
+
+    //商家解除或取消合作关系
+    public void CancelCoop(String r_id, String driver_id){
+        Cooperation cooperation = new Cooperation();
+        cooperation.setrId(r_id);
+        cooperation.setDriverId(driver_id);
+        cooperationMapper.deleteByPrimaryKey(cooperation);
     }
 }

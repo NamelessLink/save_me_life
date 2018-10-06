@@ -7,7 +7,9 @@ import com.lxs.entity.MenuKey;
 import com.lxs.entity.Order;
 import com.lxs.entity.Seller;
 import com.lxs.otherentity.DishName;
+import com.lxs.otherentity.DriverName;
 import com.lxs.otherentity.OrderDetail;
+import com.lxs.otherentity.RestaurantName;
 import com.lxs.service.SellerService;
 import com.lxs.util.JsonUtils;
 import com.lxs.util.PlanResult;
@@ -210,8 +212,6 @@ public class SellerController {
     }
 
     //商家获取订单列表
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    @RequestMapping(value = "/Seller/order/{r_id}", method = RequestMethod.GET)
     public void CheckOrder(@PathVariable("r_id")String r_id, HttpServletRequest request, HttpServletResponse response, ModelMap model)throws Exception{
         List<OrderDetail> orders = new LinkedList<OrderDetail>();
         PlanResult ResponseResult = new PlanResult();
@@ -239,6 +239,55 @@ public class SellerController {
         ResponseResult.setStatus(true);
         ResponseResult.setMsg("订单接受");
         ResponseResult.setData(order);
+        String result = JsonUtils.ObjectToJson(ResponseResult);
+        out.write(result);
+        out.close();
+    }
+
+    //商家查看已达成合作关系
+    @RequestMapping(value = "/Seller/{r_id}/coop/finish", method = RequestMethod.GET)
+    public void FinishCoopList(@PathVariable("r_id") String r_id, HttpServletRequest request,
+                               HttpServletResponse response, ModelMap model) throws Exception{
+        PlanResult ResponseResult = new PlanResult();
+        response.setContentType("application/json;charset=utf-8");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        List<DriverName> driverNames = sellerService.FinishCoopList(r_id);
+        ResponseResult.setData(driverNames);
+        ResponseResult.setStatus(true);
+        ResponseResult.setMsg("已达成合作列表");
+        String result = JsonUtils.ObjectToJson(ResponseResult);
+        out.write(result);
+        out.close();
+    }
+    //商家查看申请中的合作关系
+    @RequestMapping(value = "/Seller/{r_id}/coop/apply", method = RequestMethod.GET)
+    public void ApplyCoopList(@PathVariable("r_id") String r_id, HttpServletRequest request,
+                               HttpServletResponse response, ModelMap model) throws Exception{
+        PlanResult ResponseResult = new PlanResult();
+        response.setContentType("application/json;charset=utf-8");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        List<DriverName> driverNames = sellerService.ApplyCoopList(r_id);
+        ResponseResult.setData(driverNames);
+        ResponseResult.setStatus(true);
+        ResponseResult.setMsg("申请中合作列表");
+        String result = JsonUtils.ObjectToJson(ResponseResult);
+        out.write(result);
+        out.close();
+    }
+
+    //商家解除或取消合作关系
+    @RequestMapping(value = "/Seller/{r_id}/{driver_id}/coop/cancel", method = RequestMethod.GET)
+    public void CancelCoop(@PathVariable("r_id") String r_id, @PathVariable("driver_id") String driver_id,
+                           HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception{
+        sellerService.CancelCoop(r_id, driver_id);
+        PlanResult ResponseResult = new PlanResult();
+        response.setContentType("application/json;charset=utf-8");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        ResponseResult.setStatus(true);
+        ResponseResult.setMsg("取消成功");
         String result = JsonUtils.ObjectToJson(ResponseResult);
         out.write(result);
         out.close();
