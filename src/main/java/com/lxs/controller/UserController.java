@@ -266,12 +266,16 @@ public class UserController {
     public void SubmitOrder(@RequestParam("u_id")String u_id, @RequestParam("r_id")String r_id, @RequestParam("dish_id")String dish_id,
                             HttpServletRequest request, HttpServletResponse response, ModelMap model) throws IOException {
         PlanResult ResponseResult = new PlanResult();
-        userService.SubmitOrder(u_id, r_id, dish_id);
         response.setContentType("application/json;charset=utf-8");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
-        ResponseResult.setStatus(true);
-        ResponseResult.setMsg("提交订单");
+        if(userService.SubmitOrder(u_id, r_id, dish_id)){
+            ResponseResult.setStatus(true);
+            ResponseResult.setMsg("提交订单");
+        }else{
+            ResponseResult.setStatus(false);
+            ResponseResult.setMsg("请完成姓名和地址的输入");
+        }
         String result = JsonUtils.ObjectToJson(ResponseResult);
         out.write(result);
         out.close();

@@ -172,22 +172,33 @@ public class UserService {
     private OrderMapper orderMapper;
 
     //用户生成订单
-    public void SubmitOrder(@Param("u_id")String u_id, @Param("r_id")String r_id,
+    public boolean SubmitOrder(@Param("u_id")String u_id, @Param("r_id")String r_id,
                                @Param("dish_id")String dish_id){
         SnowFlakeIdWorker snowFlakeIdWorker = new SnowFlakeIdWorker(1,15);
         Order order = new Order();
+        Customer user = userMapper.selectByPrimaryKey(u_id);
+        if(user.getAddr() != null && user.getPhone() != null){
+            order.setSendAddr(user.getAddr());
+        }else {
+            return false;
+        }
         order.setOrderId(String.valueOf(snowFlakeIdWorker.nextId()));
         order.setCreateDate(new Date());
         order.setState(0);
-        order.setSendAddr(userMapper.selectByPrimaryKey(u_id).getAddr());
         order.setrId(r_id);
         order.setDishId(dish_id);
         order.setUserId(u_id);
         Menu menu = new Menu();
         menu = menuMapper.selectByPrimaryKey(r_id, dish_id);
-        menu.setSales(menu.getSales() + 1);
-        menuMapper.updateByPrimaryKeySelective(menu);
-        orderMapper.insertSelective(order);
+        //用户使用时基本不会触发的问题，但是测试时可能会触发
+        if(menu != null){
+            menu.setSales(menu.getSales() + 1);
+            menuMapper.updateByPrimaryKeySelective(menu);
+            orderMapper.insertSelective(order);
+            return true;
+        }else {
+            return false;
+        }
     }
 
     //用户查看订单状态

@@ -212,13 +212,14 @@ public class SellerController {
     }
 
     //商家获取订单列表
+    @RequestMapping(value = "/Seller/order/{r_id}", method = RequestMethod.GET)
     public void CheckOrder(@PathVariable("r_id")String r_id, HttpServletRequest request, HttpServletResponse response, ModelMap model)throws Exception{
         List<OrderDetail> orders = new LinkedList<OrderDetail>();
+        orders = sellerService.OrderList(r_id);
         PlanResult ResponseResult = new PlanResult();
         response.setContentType("application/json;utf-8");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
-        orders = sellerService.OrderList(r_id);
         ResponseResult.setStatus(true);
         ResponseResult.setMsg("订单详情");
         ResponseResult.setData(orders);
@@ -233,9 +234,9 @@ public class SellerController {
                             HttpServletRequest request, HttpServletResponse response, ModelMap model)throws Exception{
         PlanResult ResponseResult = new PlanResult();
         response.setContentType("application/json;utf-8");
+        Order order = sellerService.AcceptOrder(r_id, order_id);
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
-        Order order = sellerService.AcceptOrder(r_id, order_id);
         ResponseResult.setStatus(true);
         ResponseResult.setMsg("订单接受");
         ResponseResult.setData(order);

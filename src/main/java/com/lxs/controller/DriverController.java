@@ -136,9 +136,14 @@ public class DriverController {
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         Cooperation cooperation = driverService.CoopApply(driver_id, r_id);
-        ResponseResult.setData(cooperation);
-        ResponseResult.setStatus(true);
-        ResponseResult.setMsg("申请成功");
+        if(cooperation != null){
+            ResponseResult.setData(cooperation);
+            ResponseResult.setStatus(true);
+            ResponseResult.setMsg("申请成功");
+        }else{
+            ResponseResult.setStatus(false);
+            ResponseResult.setMsg("已经申请过或者已经处于合作状态");
+        }
         String result = JsonUtils.ObjectToJson(ResponseResult);
         out.write(result);
         out.close();

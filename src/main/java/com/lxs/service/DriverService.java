@@ -130,8 +130,14 @@ public class DriverService {
         Cooperation cooperation = new Cooperation();
         cooperation.setDriverId(driver_id);
         cooperation.setrId(r_id);
-        cooperationMapper.insertSelective(cooperation);
-        return cooperationMapper.selectByPrimaryKey(cooperation);
+        if(cooperationMapper.selectByPrimaryKey(cooperation) == null){
+            cooperationMapper.insertSelective(cooperation);
+            cooperation = cooperationMapper.selectByPrimaryKey(cooperation);
+            return cooperation;
+        }else{
+            cooperation = null;
+            return cooperation;
+        }
     }
 
     //骑手查看已达成合作关系
