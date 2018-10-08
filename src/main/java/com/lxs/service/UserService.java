@@ -3,20 +3,14 @@ package com.lxs.service;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lxs.dao.*;
 import com.lxs.entity.*;
-import com.lxs.otherentity.DishName;
-import com.lxs.otherentity.OrderDetail;
-import com.lxs.otherentity.RestaruantDetail;
-import com.lxs.otherentity.RestaurantName;
+import com.lxs.otherentity.*;
 import com.lxs.util.SnowFlakeIdWorker;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.lxs.util.DateUtil.ExpectDate;
 import static com.lxs.util.MD5.md5;
@@ -130,6 +124,30 @@ public class UserService {
         return restaurantNames;
     }
 
+    //获取热门餐馆列表
+    public List<HotRestaurant> HotRestaurantList() throws Exception{
+        List<RestaurantName> restaurantNames = RequestRestaruants();
+        List<HotRestaurant> hotRestaurants = new LinkedList<HotRestaurant>();
+        Iterator<RestaurantName> iterator = restaurantNames.iterator();
+        while (iterator.hasNext()){
+            HotRestaurant hotRestaurant = new HotRestaurant();
+            RestaurantName restaurantName = iterator.next();
+            hotRestaurant.setrName(restaurantName.getrName());
+            hotRestaurant.setrId(restaurantName.getrId());
+            List<Menu> menus = menuMapper.selectByRid(restaurantName.getrId());
+            for(Menu menu : menus){
+                hotRestaurant.setrSales(hotRestaurant.getrSales() + menu.getSales());
+            }
+            hotRestaurants.add(hotRestaurant);
+        }
+        Collections.sort(hotRestaurants);
+        List<HotRestaurant> resultList = new LinkedList<HotRestaurant>();
+        for(int i = 0; i < 2; i++){
+            resultList.add(hotRestaurants.get(i));
+        }
+        return resultList;
+    }
+
     @Autowired
     private DishMapper dishMapper;
     @Autowired
@@ -143,10 +161,10 @@ public class UserService {
 
     //获取餐馆菜单和详情
     public List<DishName> RequestDetail(@Param("r_id")String r_id) throws Exception{
-        List<MenuKey> selectDishes = menuMapper.selectByRid(r_id);
+        List<Menu> selectDishes = menuMapper.selectByRid(r_id);
         List<DishName> dishes = new LinkedList<DishName>();
         Restaurant restaurant = restaurantMapper.selectByPrimaryKey(r_id);
-        Iterator<MenuKey> iterator = selectDishes.iterator();
+        Iterator<Menu> iterator = selectDishes.iterator();
         RestaruantDetail restaruantDetail = new RestaruantDetail();
         while(iterator.hasNext()){
             Dish dish = dishMapper.selectByPrimaryKey(iterator.next().getDishId());
@@ -160,6 +178,22 @@ public class UserService {
 //        restaruantDetail.setDishes(dishes);
 //        restaruantDetail.setR_name(restaurant.getrName());
         return dishes;
+    }
+
+    //获取餐馆热门菜品列表
+    public List<HotDish> HotDishList(@Param("r_id")String r_id) throws Exception{
+        List<Menu> menus = menuMapper.selectByRid(r_id);
+        List<HotDish> hotDishes = new LinkedList<HotDish>();
+        Collections.sort(menus);
+        for(int i = 0; i < 2; i++){
+            HotDish hotDish = new HotDish();
+            hotDish.setDishSales(menus.get(i).getSales());
+            hotDish.setDishId(menus.get(i).getDishId());
+            hotDish.setDishPrice(dishMapper.selectByPrimaryKey(menus.get(i).getDishId()).getDishPrice());
+            hotDish.setDishName(dishMapper.selectByPrimaryKey(menus.get(i).getDishId()).getDishName());
+            hotDishes.add(hotDish);
+        }
+        return hotDishes;
     }
 
     //获取菜品详情

@@ -10776,7 +10776,9 @@ function homePageInit() {
                         //重新获取主页面
                         orderInit();
                     }, '/User/order/' + uid);
-                }
+                }else{
+                    alert("请填写地址或姓名");
+				}
             }, '/User/add_order', 'u_id=' + uid + '&r_id=' + target.dataset.rId + '&dish_id=' + target.dataset.id);
         }
     });

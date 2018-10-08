@@ -7,6 +7,10 @@ public class DishName {
 
     private int dishPrice;
 
+    public DishName(){
+        dishPrice = 0;
+    }
+
     public void setDishId(String dishId) { this.dishId = dishId; }
 
     public void setDishName(String dishName) { this.dishName = dishName; }

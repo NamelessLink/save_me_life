@@ -71,7 +71,16 @@ public class SellerService {
 
     //卖家菜单
     public List<MenuKey> Menu(@Param("r_id")String r_id){
-        List<MenuKey> menuKeys = menuMapper.selectByRid(r_id);
+        List<Menu> menus = menuMapper.selectByRid(r_id);
+        List<MenuKey> menuKeys = new LinkedList<MenuKey>();
+        Iterator<Menu> iterator = menus.iterator();
+        while (iterator.hasNext()){
+            Menu menu = iterator.next();
+            MenuKey menuKey = new MenuKey();
+            menuKey.setDishId(menu.getDishId());
+            menuKey.setrId(menu.getrId());
+            menuKeys.add(menuKey);
+        }
         return menuKeys;
     }
 

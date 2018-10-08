@@ -6,10 +6,7 @@ import com.lxs.dao.RestaurantMapper;
 import com.lxs.entity.Customer;
 import com.lxs.entity.Dish;
 import com.lxs.entity.Restaurant;
-import com.lxs.otherentity.DishName;
-import com.lxs.otherentity.OrderDetail;
-import com.lxs.otherentity.RestaruantDetail;
-import com.lxs.otherentity.RestaurantName;
+import com.lxs.otherentity.*;
 import com.lxs.service.UserService;
 import com.lxs.util.JsonUtils;
 import com.lxs.util.PlanResult;
@@ -201,9 +198,6 @@ public class UserController {
         }
     }
 
-    @Autowired
-    private RestaurantMapper restaurantMapper;
-
     //首页餐馆列表
     @RequestMapping(value = "/User/restaurant", method = RequestMethod.GET)
     public void Restaurant(HttpServletResponse response, HttpServletRequest request, ModelMap model) throws Exception{
@@ -218,6 +212,23 @@ public class UserController {
         ResponseResult.setMsg("获取所有餐馆");
 //        request.setAttribute  ("AllRestaruants", AllRestaurants);
 //        request.getRequestDispatcher("index").forward(request, response);
+        String result = JsonUtils.ObjectToJson(ResponseResult);
+        out.write(result);
+        out.close();
+    }
+
+    //首页热门餐馆列表
+    @RequestMapping(value = "/User/restaurant/hot", method = RequestMethod.GET)
+    public void HotRestaurant(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception{
+        PlanResult ResponseResult = new PlanResult();
+        List<HotRestaurant> restaurants = new LinkedList<HotRestaurant>();
+        restaurants = userService.HotRestaurantList();
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=utf-8");
+        PrintWriter out = response.getWriter();
+        ResponseResult.setData(restaurants);
+        ResponseResult.setStatus(true);
+        ResponseResult.setMsg("获取热门餐馆列表");
         String result = JsonUtils.ObjectToJson(ResponseResult);
         out.write(result);
         out.close();
@@ -238,6 +249,26 @@ public class UserController {
         ResponseResult.setStatus(true);
         ResponseResult.setMsg("餐馆详情");
         ResponseResult.setData(dishNames);
+        String result = JsonUtils.ObjectToJson(ResponseResult);
+        out.write(result);
+        out.close();
+    }
+
+    //获取该餐馆热门菜品列表
+    @RequestMapping(value = "/User/restaurant/{r_id}/hot", method = RequestMethod.GET)
+    public void HotDishList(@PathVariable(value = "r_id")String r_id, HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception{
+        PlanResult ResponseResult = new PlanResult();
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=utf-8");
+        PrintWriter out = response.getWriter();
+//        RestaruantDetail restaruantDetail = userService.RequestDetail(r_id);
+//        Map<String, Object> resultMap = new HashMap<>();
+//        resultMap.put("restaurant", restaruantDetail);
+        List<HotDish> hotDishes = new LinkedList<HotDish>();
+        hotDishes = userService.HotDishList(r_id);
+        ResponseResult.setStatus(true);
+        ResponseResult.setMsg("获取热门菜品列表");
+        ResponseResult.setData(hotDishes);
         String result = JsonUtils.ObjectToJson(ResponseResult);
         out.write(result);
         out.close();

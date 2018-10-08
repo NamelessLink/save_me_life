@@ -20,7 +20,7 @@ public interface MenuMapper {
     int updateByPrimaryKey(Menu record);
 
     //自己写的
-    List<MenuKey> selectByRid(@Param("r_id") String r_id);
+    List<Menu> selectByRid(@Param("r_id") String r_id);
 
     Menu selectByPrimaryKey(@Param("r_id") String r_id, @Param("dish_id") String dish_id);
 }
