@@ -6,7 +6,7 @@ public class HotRestaurant extends RestaurantName implements Comparable<HotResta
 
     private int rSales;
 
-    private List<HotDish> hotDishes;
+//    private List<HotDish> hotDishes;
 
     public HotRestaurant(){
         this.rSales = 0;
@@ -16,9 +16,9 @@ public class HotRestaurant extends RestaurantName implements Comparable<HotResta
 
     public int getrSales() { return rSales; }
 
-    public void setHotDishes(List<HotDish> hotDishes) { this.hotDishes = hotDishes; }
+//    public void setHotDishes(List<HotDish> hotDishes) { this.hotDishes = hotDishes; }
 
-    public List<HotDish> getHotDishes() { return hotDishes; }
+//    public List<HotDish> getHotDishes() { return hotDishes; }
 
     @Override
     public int compareTo(HotRestaurant o) {

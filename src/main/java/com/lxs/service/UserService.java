@@ -142,8 +142,12 @@ public class UserService {
         }
         Collections.sort(hotRestaurants);
         List<HotRestaurant> resultList = new LinkedList<HotRestaurant>();
-        for(int i = 0; i < 2; i++){
-            resultList.add(hotRestaurants.get(i));
+        if(hotRestaurants.size() >= 2){
+            for(int i = 0; i < 2; i++){
+                resultList.add(hotRestaurants.get(i));
+            }
+        }else{
+            return hotRestaurants;
         }
         return resultList;
     }
@@ -185,13 +189,24 @@ public class UserService {
         List<Menu> menus = menuMapper.selectByRid(r_id);
         List<HotDish> hotDishes = new LinkedList<HotDish>();
         Collections.sort(menus);
-        for(int i = 0; i < 2; i++){
-            HotDish hotDish = new HotDish();
-            hotDish.setDishSales(menus.get(i).getSales());
-            hotDish.setDishId(menus.get(i).getDishId());
-            hotDish.setDishPrice(dishMapper.selectByPrimaryKey(menus.get(i).getDishId()).getDishPrice());
-            hotDish.setDishName(dishMapper.selectByPrimaryKey(menus.get(i).getDishId()).getDishName());
-            hotDishes.add(hotDish);
+        if (menus.size() >= 2){
+            for(int i = 0; i < 2; i++){
+                HotDish hotDish = new HotDish();
+                hotDish.setDishSales(menus.get(i).getSales());
+                hotDish.setDishId(menus.get(i).getDishId());
+                hotDish.setDishPrice(dishMapper.selectByPrimaryKey(menus.get(i).getDishId()).getDishPrice());
+                hotDish.setDishName(dishMapper.selectByPrimaryKey(menus.get(i).getDishId()).getDishName());
+                hotDishes.add(hotDish);
+            }
+        }else {
+            for (Menu menu : menus){
+                HotDish hotDish = new HotDish();
+                hotDish.setDishSales(menu.getSales());
+                hotDish.setDishId(menu.getDishId());
+                hotDish.setDishPrice(dishMapper.selectByPrimaryKey(menu.getDishId()).getDishPrice());
+                hotDish.setDishName(dishMapper.selectByPrimaryKey(menu.getDishId()).getDishName());
+                hotDishes.add(hotDish);
+            }
         }
         return hotDishes;
     }
